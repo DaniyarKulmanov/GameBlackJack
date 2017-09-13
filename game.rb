@@ -11,7 +11,7 @@ class Game
   end
 
   def new_round
-    @bank = 20
+    @bank += 20
     @user.money -= 10
     @dealer.money -= 10
   end

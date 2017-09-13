@@ -15,6 +15,7 @@ class Player
     @points ||= 0
     @alter_points ||= 0
     @cards << random_card
+    @points = @alter_points if @alter_points <= 21
   end
 
   def random_card
