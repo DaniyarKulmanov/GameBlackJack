@@ -1,7 +1,6 @@
 require_relative 'player'
 class Dealer < Player
-
-  def initialize(name = 'Dialer')
+  def initialize(name = 'Dealer')
     super
   end
 end

@@ -2,16 +2,13 @@
 
 # class Player, User, Dialer
 class Player 
- * pass move 
- * add_card
+* Initializes values for Player
 
 class User < Player 
- * open cards
+ * User actions
  
 class Dialer < Player 
- * AI logic make ~ 21 points
+ * AI actions
 
 # module Card : 
-* cards_all class instance_variable
-* give 2 random cards
-* give 1 random card
+* store cards, points, add cards and points 
