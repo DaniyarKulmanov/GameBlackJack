@@ -1,5 +1,5 @@
 require_relative 'player'
-class Dialer < Player
+class Dealer < Player
 
   def initialize(name = 'Dialer')
     super

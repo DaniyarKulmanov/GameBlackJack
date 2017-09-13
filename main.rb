@@ -1,17 +1,17 @@
 require_relative 'user'
-require_relative 'dialer'
+require_relative 'dealer'
 # ask name
 puts 'Enter your name:'
 name = gets.chomp
 
 # initialize user and ai
 user = User.new(name)
-ai = Dialer.new
+ai = Dealer.new
 
 puts "#{user.name} welcome to BlackJack game!"
 puts '----------Game Begins GOOD LUCK!!----------'
 
-puts 'Dialer:', Cards::HIDDEN_CARD, Cards::HIDDEN_CARD, "Money = #{ai.money}$"
+puts 'Dealer:', Cards::HIDDEN_CARD, Cards::HIDDEN_CARD, "Money = #{ai.money}$"
 puts '---------Player----------'
 puts 'Your Cards:', user.cards, "Money = #{user.money}$"
 
