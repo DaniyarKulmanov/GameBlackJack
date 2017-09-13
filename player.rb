@@ -1,9 +1,12 @@
+require_relative 'card'
+
 class Player
-  attr_reader :money
+  include Cards
+  attr_reader :money, :name
 
-  protected
-
-  def money_init
+  def initialize(name)
+    @name = name
     @money = 100
+    2.times { add_card }
   end
 end
