@@ -1,14 +1,4 @@
 # GameBlackJack
-
-# class Player, User, Dialer
-class Player 
-* Initializes values for Player
-
-class User < Player 
- * User actions
- 
-class Dialer < Player 
- * AI actions
-
-# module Card : 
-* store cards, points, add cards and points 
+player.rb - Инициализация значений, добавления карты
+game.rb - Управление игрой
+main.rb - Интерфейс получения данных ввода пользователяы
