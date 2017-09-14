@@ -11,6 +11,8 @@ class Player
 
   def prepare
     @money -= 10
+    @cards = []
+    @points = 0
     2.times { add_card }
   end
 
@@ -41,7 +43,9 @@ class Player
       @alter_points += 10
     else
       @points += 1
-      @alter_points += 11
+      cost = 11
+      cost = 1 if cost + @alter_points > 21
+      @alter_points += cost
     end
   end
 end
