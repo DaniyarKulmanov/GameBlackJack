@@ -9,6 +9,11 @@ class Player
     @money = 100
   end
 
+  def prepare
+    @money -= 10
+    2.times { add_card }
+  end
+  
   def add_card
     @cards ||= []
     @points ||= 0
