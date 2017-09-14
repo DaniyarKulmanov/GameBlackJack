@@ -1,24 +1,17 @@
-require_relative 'game'
+require_relative 'player'
+
+# 1 init values, start game
+loop do
+  puts 'Enter your name:'
+  user = Player.new(gets.chomp)
+  dealer = Player.new 'Dealer'
+  # 2 initialize round data -10$ + 2 cards for both
 
 
-puts 'Enter your name:'
-name = gets.chomp
+  puts '1 - New game', '0 - Exit game'
+  break if gets.chomp == '0'
+  p user, dealer
+end
 
-game = Game.new(name)
 
-system('clear')
-puts "#{name} welcome to BlackJack game! Collect 21 points to win"
-puts "#{game.dealer.name}'s cards:"
-puts "#{Player::HIDDEN_CARD} #{Player::HIDDEN_CARD}"
 
-puts 'Your cards:'
-game.user.cards.each { |card| print card, ' ' }
-puts ''
-puts "Cash:#{game.user.money}$"
-puts "Points:#{game.user.points}"
-puts '============================================================'
-puts 'Make turn:',
-     '0 - End game',
-     '1 - Pass turn',
-     '2 - Add card',
-     '3 - Open cards'

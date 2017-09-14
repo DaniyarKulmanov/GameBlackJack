@@ -7,7 +7,6 @@ class Player
   def initialize(name)
     @name = name
     @money = 100
-    2.times { add_card }
   end
 
   def add_card
