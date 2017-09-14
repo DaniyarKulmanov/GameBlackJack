@@ -34,14 +34,15 @@ loop do # new game
     when '1' # Dealer turn
       new_round = false
       dealer_turn.call dealer
-      round_menu = 'Choose your action:', '2 - add card', '3 - open cards'
     when '2'
-      # user.add_card
-      # new_round = false
+      user.add_card if user.cards.size < 3
+      new_round = false
     when '3'
-      round_menu = 'Choose your action:', '1 - skip', '2 - add card', '3 - open cards'
       new_round = true
       break if command == '3'
+    else
+      new_round = false
+      next
     end
     # round end user.money = 0, user asked to open cards, user and dealer have 3 cards
   end
