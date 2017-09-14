@@ -13,7 +13,7 @@ class Player
     @money -= 10
     2.times { add_card }
   end
-  
+
   def add_card
     @cards ||= []
     @points ||= 0
