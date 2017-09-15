@@ -24,6 +24,8 @@ class Player
     @points = @alter_points if @alter_points <= 21
   end
 
+  private
+
   def random_card
     number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'A', 'B', 'D'].shuffle.join[0]
     add_points number.to_i

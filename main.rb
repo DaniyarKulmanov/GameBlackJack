@@ -1,8 +1,11 @@
 require_relative 'player'
 
 new_round = true
-round_menu = 'Choose your action:', '1 - skip', '2 - add card',
-             '3 - open cards', 'press enter to abort'
+round_menu = 'Choose your action:',
+             '1 - skip',
+             '2 - add card',
+             '3 - open cards',
+             '0 - exit'
 
 show_data = proc do |player, show_cards|
   puts "#{player.name}:"
@@ -14,7 +17,7 @@ show_data = proc do |player, show_cards|
 end
 
 dealer_turn = proc do |dealer|
-  dealer.add_card if dealer.points < 12 && dealer.points < 19
+  dealer.add_card if dealer.points < 12
 end
 
 result = proc do |user, dealer|
@@ -48,23 +51,28 @@ result = proc do |user, dealer|
   gets
 end
 
-# 1 init values, start game
-loop do # new game
+start_game = proc do
   puts 'Enter your name:'
-  user = Player.new(gets.chomp)
-  dealer = Player.new 'Dealer'
-  puts user, dealer
-  loop do # next round initialize round data -10$ + 2 cards for both
-    break if user.money.zero? || dealer.money.zero?
-    system('clear')
-    user.prepare if new_round
-    dealer.prepare if new_round
-    show_data.call dealer, false # change to false
-    show_data.call user, true
+  [Player.new(gets.chomp), Player.new('Dealer')]
+end
+
+start_round = proc do |user, dealer|
+  break if user.money.zero? || dealer.money.zero?
+  system('clear')
+  user.prepare if new_round
+  dealer.prepare if new_round
+  show_data.call dealer, false
+  show_data.call user, true
+end
+
+process_round = proc do |user, dealer|
+  loop do
+    puts 'New round' if new_round
+    start_round.call user, dealer
     puts round_menu
     command = gets.chomp
     case command
-    when '1' # Dealer turn
+    when '1'
       new_round = false
       dealer_turn.call dealer
     when '2'
@@ -74,9 +82,12 @@ loop do # new game
       new_round = true
       result.call user, dealer
       next
-    else
+    when '0'
       new_round = true
       break
+    else
+      new_round = false
+      next
     end
     if user.cards.size == 3 && dealer.cards.size == 3
       result.call user, dealer
@@ -84,11 +95,17 @@ loop do # new game
       next
     end
   end
-  puts 'Game Over' if user.money.zero?
-  puts 'Congratulations!!! VICTORY!!' if user.money > 100
-  puts '=====================', 'New game - press Enter', 'Exit game - enter 0'
-  break if gets.chomp == '0'
 end
 
-
-
+loop do
+  player = start_game.call
+  user = player[0]
+  dealer = player[1]
+  process_round.call user, dealer
+  puts 'Game Over' if user.money.zero?
+  puts 'Congratulations!!! VICTORY!!' if user.money > 100
+  puts '=====================',
+       'New game - press Enter',
+       '0 - exit game'
+  break if gets.chomp == '0'
+end
