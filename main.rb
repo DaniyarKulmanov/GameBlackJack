@@ -99,12 +99,10 @@ end
 
 loop do
   player = start_game.call
-  user = player[0]
-  dealer = player[1]
-  process_round.call user, dealer
-  puts 'Game Over' if user.money.zero?
-  puts 'Congratulations!!! VICTORY!!' if user.money > 100
-  puts '=====================',
+  process_round.call player[0], player[1]
+  puts 'Game Over' if player[0].money.zero?
+  puts 'Congratulations!!! VICTORY!!' if player[0].money > 100
+  puts '========Game end==========',
        'New game - press Enter',
        '0 - exit game'
   break if gets.chomp == '0'
