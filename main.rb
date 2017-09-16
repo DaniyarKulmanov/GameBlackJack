@@ -3,11 +3,11 @@ require_relative 'desk'
 require_relative 'game'
 
 loop do
-  # system('clear')
   puts 'Введите Ваше имя:'
   name = gets.chomp
   puts 'Игра: имя не должно быть пустым' if name.strip.empty?
   next if name.strip.empty?
+  system('clear')
   game = Game.new(name)
   game.start
   command = nil
