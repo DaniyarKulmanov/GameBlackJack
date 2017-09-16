@@ -1,24 +1,16 @@
-require_relative 'desk'
 class Player
   attr_reader :name
-  attr_accessor :money, :cards, :points, :alter_points
+  attr_accessor :money
 
   def initialize(name)
     @name = name
     @money = 100
-  end
-
-  def prepare(desk)
-    @money -= 10
     @cards = []
     @points = 0
-    2.times { add_card desk }
   end
 
-  def add_card(desk)
-    @cards ||= []
-    @points ||= 0
-    @alter_points ||= 0
-    @cards << random_card(desk)
+  def add_card(card_info)
+    @cards << card_info[:card]
+    @points = card_info[:points] unless card_info[:alter_points]
   end
 end
