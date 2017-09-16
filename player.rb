@@ -1,6 +1,5 @@
+require_relative 'desk'
 class Player
-  HIDDEN_CARD = "\u{1F0A0}".freeze
-
   attr_reader :name
   attr_accessor :money, :cards, :points, :alter_points
 
@@ -9,45 +8,17 @@ class Player
     @money = 100
   end
 
-  def prepare
+  def prepare(desk)
     @money -= 10
     @cards = []
     @points = 0
-    2.times { add_card }
+    2.times { add_card desk }
   end
 
-  def add_card
+  def add_card(desk)
     @cards ||= []
     @points ||= 0
     @alter_points ||= 0
-    @cards << random_card
-    @points = @alter_points if @alter_points <= 21
-  end
-
-  private
-
-  def random_card
-    number = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 'A', 'B', 'D'].shuffle.join[0]
-    add_points number.to_i
-    suit = %w[A B C D].shuffle.join[0]
-    hexnum = "1F0#{suit}#{number}"
-    card = ''
-    card << hexnum.to_i(16)
-  end
-
-  def add_points(number)
-    case number
-    when (2..10)
-      @points += number
-      @alter_points += number
-    when 0
-      @points += 10
-      @alter_points += 10
-    else
-      @points += 1
-      cost = 11
-      cost = 1 if cost + @alter_points > 21
-      @alter_points += cost
-    end
+    @cards << random_card(desk)
   end
 end

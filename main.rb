@@ -6,7 +6,7 @@ round_menu = 'Choose your action:',
              '2 - add card',
              '3 - open cards',
              '0 - exit'
-
+desk = []
 show_data = proc do |player, show_cards|
   puts "#{player.name}:"
   player.cards.each { |card| print card, ' ' } if show_cards
@@ -17,7 +17,7 @@ show_data = proc do |player, show_cards|
 end
 
 dealer_turn = proc do |dealer|
-  dealer.add_card if dealer.points < 12
+  dealer.add_card desk if dealer.points < 12
 end
 
 result = proc do |user, dealer|
@@ -52,15 +52,17 @@ result = proc do |user, dealer|
 end
 
 start_game = proc do
+  Desk.fill desk
   puts 'Enter your name:'
   [Player.new(gets.chomp), Player.new('Dealer')]
 end
 
 start_round = proc do |user, dealer|
   break if user.money.zero? || dealer.money.zero?
+  Desk.fill desk
   system('clear')
-  user.prepare if new_round
-  dealer.prepare if new_round
+  user.prepare desk if new_round
+  dealer.prepare desk if new_round
   show_data.call dealer, false
   show_data.call user, true
 end
@@ -76,7 +78,7 @@ process_round = proc do |user, dealer|
       new_round = false
       dealer_turn.call dealer
     when '2'
-      user.add_card if user.cards.size < 3
+      user.add_card desk if user.cards.size < 3
       new_round = false
     when '3'
       new_round = true
