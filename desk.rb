@@ -1,13 +1,12 @@
-class Game
+class Desk
   HIDDEN_CARD = "\u{1F0A0}".freeze
   NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'D', 'E'].freeze
   SUITS = %w[A B C D].freeze
 
-  attr_accessor :desk, :new_round
+  attr_accessor :desk
 
   def initialize
     @desk ||= []
-    @new_round = true
     fill @desk
   end
 
@@ -49,5 +48,4 @@ class Game
       @suit_number[:alter_points] = 11
     end
   end
-
 end
