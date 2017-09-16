@@ -14,7 +14,7 @@ class Player
     add_points card_info[:points], card_info[:alter_points]
   end
 
-  def add_points(points, alter_points)
+  def add_points(points, alter_points) # TODO: fix if ACE first - rename to count_points
     sum = 0
     sum = @points + alter_points unless alter_points.nil?
     @points = sum if sum <= 21 && !alter_points.nil?

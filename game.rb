@@ -4,6 +4,7 @@ require_relative 'desk'
 class Game
   COOL = "\u{1F60E}".freeze
   TROPHY = "\u{1F3C6}".freeze
+  LOOSE = "\u{1F61B}".freeze
   CHOOSE_ACTION = 'Введите номер действия, затем нажмите Enter:'.freeze
   SKIP = '1 - Пропустить ход'.freeze
   ADD_CARD = '2 - Добавить карту'.freeze
@@ -25,9 +26,13 @@ class Game
     end
   end
 
-  def final_result
-    puts "#{COOL} #{TROPHY} " * 10
-    puts "#{@player.name} Поздравляем !! Вы победили!"
+  def final_result # TODO
+    puts "#{COOL} #{TROPHY} " * 10 if @dealer.money.zero?
+    puts "#{LOOSE} #{TROPHY} " * 10 if @player.money.zero?
+    display_info @dealer, false
+    display_info @player, false
+    puts "#{@player.name} Поздравляем !! Вы победили!" if @dealer.money.zero?
+    puts "#{@player.name} Вы проиграли!" if @player.money.zero?
   end
 
   def new_round
@@ -52,11 +57,15 @@ class Game
 
   def choose_action
     loop do
+      if @player.cards.size == 3 && @dealer.cards.size == 3
+        open_cards
+        break
+      end
       system('clear')
       show_menu
       command = gets.chomp
       execute command
-      @exit = true if command == '4'
+      @exit = true if command == '4' || @player.money.zero? || @dealer.money.zero?
       break if @exit || command == '3'
     end
   end
@@ -95,6 +104,7 @@ class Game
     puts 'Результаты:'
     display_info @dealer, false
     display_info @player, false
+    check_points
     puts ' ', 'Нажмите Enter'
     gets
   end
@@ -105,5 +115,31 @@ class Game
     @dealer.cards = []
     @player.points = 0
     @dealer.points = 0
+  end
+
+  def check_points # TODO: не прибалвяет последний выйгршишь
+    case @player.points
+    when (1..21)
+      if @player.points > @dealer.points || @dealer.points > 21
+        puts 'Round won +10$ credit'
+        @player.money += 20
+      elsif @player.points == @dealer.points
+        puts 'draw'
+        @player.money += 10
+        @dealer.money += 10
+      elsif @player.points < @dealer.points && @dealer.points <= 21
+        puts 'Round lost -10$ credit'
+        @dealer.money += 20
+      end
+    else
+      if @dealer.points <= 21
+        puts 'Round lost -10$ credit'
+        @dealer.money += 20
+      else
+        puts 'draw'
+        @player.money += 10
+        @dealer.money += 10
+      end
+    end
   end
 end
