@@ -21,10 +21,9 @@ class Desk
   end
 
   def random_card
-    card = @desk[rand(0..@desk.size)]
+    card = @desk[rand(0...@desk.size)]
     @desk.delete card
-    card unless card.nil? # TODO: если убрать unless card.nil?
-    # рандомно падает с undefined method `[]' for nil:NilClass
+    card unless card.nil?
   end
 
   private

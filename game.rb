@@ -26,7 +26,7 @@ class Game
     end
   end
 
-  def final_result # TODO
+  def final_result
     puts "#{COOL} #{TROPHY} " * 10 if @dealer.money.zero?
     puts "#{LOOSE} #{TROPHY} " * 10 if @player.money.zero?
     display_info @dealer, false
