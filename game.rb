@@ -51,7 +51,7 @@ class Game
 
   def display_info(user, hidden)
     puts "Карты #{user.name}:"
-    user.cards.each { |card| print card, ' ' } unless hidden
+    user.cards.each { |card_info| print card_info[:card], ' ' } unless hidden
     user.cards.each { print Desk::HIDDEN_CARD, ' ' } if hidden
     puts "\nДеньги: #{user.money}$, Очки:#{user.points}" unless hidden
     puts '' if hidden

@@ -10,7 +10,7 @@ class Player
   end
 
   def add_card(card_info)
-    @cards << card_info[:card]
+    @cards << card_info
     add_points card_info[:points], card_info[:alter_points]
   end
 
