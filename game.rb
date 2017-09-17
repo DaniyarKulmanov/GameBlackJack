@@ -27,12 +27,14 @@ class Game
   end
 
   def final_result
-    puts "#{COOL} #{TROPHY} " * 10 if @dealer.money.zero?
-    puts "#{LOOSE} #{TROPHY} " * 10 if @player.money.zero?
-    display_info @dealer, false
-    display_info @player, false
-    puts "#{@player.name} Поздравляем !! Вы победили!" if @dealer.money.zero?
-    puts "#{@player.name} Вы проиграли!" if @player.money.zero?
+    player = @player.money
+    dealer = @dealer.money
+    puts "#{COOL} #{TROPHY} " * 10 if dealer.zero?
+    puts "#{LOOSE} #{TROPHY} " * 10 if player.zero?
+    puts "#{@player.name.upcase} Поздравляем !! Вы победили!" if dealer.zero?
+    puts "#{@player.name} Вы проиграли!" if player.zero?
+    puts "#{COOL} #{TROPHY} " * 10 if dealer.zero?
+    puts "#{LOOSE} #{TROPHY} " * 10 if player.zero?
   end
 
   def new_round
@@ -65,7 +67,11 @@ class Game
       show_menu
       command = gets.chomp
       execute command
-      @exit = true if command == '4' || @player.money.zero? || @dealer.money.zero?
+      if @player.money.zero? || @dealer.money.zero?
+        check_points
+        @exit = true
+      end
+      @exit = true if command == '4'
       break if @exit || command == '3'
     end
   end
@@ -102,9 +108,9 @@ class Game
   def open_cards
     system('clear')
     puts 'Результаты:'
+    check_points
     display_info @dealer, false
     display_info @player, false
-    check_points
     puts ' ', 'Нажмите Enter'
     gets
   end
@@ -117,26 +123,26 @@ class Game
     @dealer.points = 0
   end
 
-  def check_points # TODO: не прибалвяет последний выйгршишь
+  def check_points
     case @player.points
     when (1..21)
       if @player.points > @dealer.points || @dealer.points > 21
-        puts 'Round won +10$ credit'
+        puts 'Вы победили 20$ уходит на Ваш счёт'
         @player.money += 20
       elsif @player.points == @dealer.points
-        puts 'draw'
+        puts 'Ничья, ставка возвращена.'
         @player.money += 10
         @dealer.money += 10
       elsif @player.points < @dealer.points && @dealer.points <= 21
-        puts 'Round lost -10$ credit'
+        puts 'Раунд проигран 20$ уходит Дилеру'
         @dealer.money += 20
       end
     else
       if @dealer.points <= 21
-        puts 'Round lost -10$ credit'
+        puts 'Раунд проигран 20$ уходит Дилеру'
         @dealer.money += 20
       else
-        puts 'draw'
+        puts 'Ничья, ставка возвращена.'
         @player.money += 10
         @dealer.money += 10
       end

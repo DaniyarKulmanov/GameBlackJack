@@ -1,5 +1,3 @@
-require_relative 'player'
-require_relative 'desk'
 require_relative 'game'
 
 loop do
