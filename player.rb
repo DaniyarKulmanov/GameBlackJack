@@ -17,7 +17,11 @@ class Player
   def add_points(points, alter_points) # TODO: fix if ACE first - rename to count_points
     sum = 0
     sum = @points + alter_points unless alter_points.nil?
-    @points = sum if sum <= 21 && !alter_points.nil?
-    @points += points if alter_points.nil? || sum > 21
+    unless alter_points.nil?
+      @points = sum if sum <= 21
+      @points += points if sum > 21
+    end
+    @points += points if alter_points.nil?
+    @points -= 10 if @cards.size == 3 && !@cards[0][:alter_points].nil? && @points >= 21
   end
 end

@@ -67,10 +67,7 @@ class Game
       show_menu
       command = gets.chomp
       execute command
-      if @player.money.zero? || @dealer.money.zero?
-        check_points
-        @exit = true
-      end
+      @exit = true if @player.money.zero? || @dealer.money.zero?
       @exit = true if command == '4'
       break if @exit || command == '3'
     end
