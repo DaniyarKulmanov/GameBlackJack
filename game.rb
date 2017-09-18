@@ -1,5 +1,7 @@
 require_relative 'player'
-require_relative 'desk'
+require_relative 'deck'
+# TODO: make module and extract private methods to module
+# include module in Game class
 
 class Game
   COOL = "\u{1F60E}".freeze
@@ -10,8 +12,7 @@ class Game
   ADD_CARD = '2 - Добавить карту'.freeze
   OPEN = '3 - Раскрыть карты'.freeze
 
-
-  attr_accessor :skip_turn, :add_card, :exit, :desk
+  attr_accessor :skip_turn, :add_card, :exit, :deck
 
   def initialize(player_name)
     @player = Player.new player_name
@@ -40,8 +41,8 @@ class Game
   def new_round
     round_initialize
     2.times do
-      @player.add_card @desk.random_card
-      @dealer.add_card @desk.random_card
+      @player.add_card @deck.random_card
+      @dealer.add_card @deck.random_card
     end
     @player.money -= 10
     @dealer.money -= 10
@@ -52,14 +53,14 @@ class Game
   def display_info(user, hidden)
     puts "Карты #{user.name}:"
     user.cards.each { |card_info| print card_info[:card], ' ' } unless hidden
-    user.cards.each { print Desk::HIDDEN_CARD, ' ' } if hidden
+    user.cards.each { print Deck::HIDDEN_CARD, ' ' } if hidden
     puts "\nДеньги: #{user.money}$, Очки:#{user.points}" unless hidden
     puts '' if hidden
   end
 
   def choose_action
     loop do
-      if @player.cards.size == 3 && @dealer.cards.size == 3
+      if both_three_cards?
         open_cards
         break
       end
@@ -67,7 +68,7 @@ class Game
       show_menu
       command = gets.chomp
       execute command
-      @exit = true if @player.money.zero? || @dealer.money.zero?
+      @exit = true if no_money?
       @exit = true if command == '4'
       break if @exit || command == '3'
     end
@@ -90,16 +91,13 @@ class Game
       dealer_move
     when '2'
       @add_card = true
-      @player.add_card @desk.random_card if @player.cards.size < 3
-    when '3'
-      open_cards
+      @player.add_card @deck.random_card if @player.cards.size < 3
+    when '3' then open_cards
     end
   end
 
   def dealer_move
-    if @dealer.points < 12
-      @dealer.add_card @desk.random_card
-    end
+    @dealer.add_card @deck.random_card if @dealer.points < 12
   end
 
   def open_cards
@@ -113,7 +111,7 @@ class Game
   end
 
   def round_initialize
-    @desk = Desk.new
+    @deck = Deck.new
     @player.cards = []
     @dealer.cards = []
     @player.points = 0
@@ -123,26 +121,44 @@ class Game
   def check_points
     case @player.points
     when (1..21)
-      if @player.points > @dealer.points || @dealer.points > 21
-        puts 'Вы победили 20$ уходит на Ваш счёт'
-        @player.money += 20
-      elsif @player.points == @dealer.points
-        puts 'Ничья, ставка возвращена.'
-        @player.money += 10
-        @dealer.money += 10
-      elsif @player.points < @dealer.points && @dealer.points <= 21
-        puts 'Раунд проигран 20$ уходит Дилеру'
-        @dealer.money += 20
-      end
+      winner @player if player_points_better?
+      draw if points_equal?
+      winner @dealer if dealer_points_better?
     else
-      if @dealer.points <= 21
-        puts 'Раунд проигран 20$ уходит Дилеру'
-        @dealer.money += 20
-      else
-        puts 'Ничья, ставка возвращена.'
-        @player.money += 10
-        @dealer.money += 10
-      end
+      winner @dealer if @dealer.points <= 21
     end
+  end
+
+  private
+
+  def both_three_cards?
+    @player.cards.size == 3 && @dealer.cards.size == 3
+  end
+
+  def no_money?
+    @player.money.zero? || @dealer.money.zero?
+  end
+
+  def winner(user)
+    puts "#{user.name} победил +20$ уходит #{user.money}"
+    user.money += 20
+  end
+
+  def draw
+    puts 'Ничья, ставка возвращена.'
+    @player.money += 10
+    @dealer.money += 10
+  end
+
+  def player_points_better?
+    @player.points > @dealer.points || @dealer.points > 21
+  end
+
+  def points_equal?
+    @player.points == @dealer.points
+  end
+
+  def dealer_points_better?
+    @player.points < @dealer.points && @dealer.points <= 21
   end
 end

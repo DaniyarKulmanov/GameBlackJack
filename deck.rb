@@ -1,4 +1,4 @@
-class Desk
+class Deck
   HIDDEN_CARD = "\u{1F0A0}".freeze
   NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'D', 'E'].freeze
   SUITS = %w[A B C D].freeze
@@ -6,23 +6,23 @@ class Desk
   attr_accessor :desk
 
   def initialize
-    @desk ||= []
-    fill @desk
+    @deck ||= []
+    fill @deck
   end
 
-  def fill(desk)
+  def fill(deck)
     SUITS.each do |suit|
       NUMBERS.each do |number|
         convert_suit suit, number
         card_point number
-        desk << @suit_number
+        deck << @suit_number
       end
     end
   end
 
   def random_card
-    card = @desk[rand(0...@desk.size)]
-    @desk.delete card
+    card = @deck[rand(0...@deck.size)]
+    @deck.delete card
     card unless card.nil?
   end
 

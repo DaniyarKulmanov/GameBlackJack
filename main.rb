@@ -10,7 +10,6 @@ loop do
   game.start
   command = nil
   loop do
-    # system('clear')
     game.final_result
     puts "#{name}: введите N или Q" unless (%w[N Q].include? command) || command.nil?
     puts 'N - Новая игра', 'Q - Выйти'
